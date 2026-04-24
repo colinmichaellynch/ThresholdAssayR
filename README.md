@@ -4,10 +4,7 @@
 
 The core model is
 
-```text
-\[
-P(Y = 1 \mid x) = \operatorname{logistic}\{-k(x-\theta)\},
-\]
+P(Y = 1 given x) = logistic(-k(x-\theta),
 
 where:
 
