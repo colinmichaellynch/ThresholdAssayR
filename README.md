@@ -303,7 +303,3 @@ When the true curve is very shallow, when sample size is small, or when cue leve
 ## Reproducibility
 
 Most functions accept a `seed` argument. Set this argument to reproduce sampling sequences, simulated datasets, and power analyses.
-
-## License
-
-Add your preferred license here before uploading to GitHub.
