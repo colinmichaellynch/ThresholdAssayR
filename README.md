@@ -4,7 +4,9 @@
 
 The core model is
 
-P(Y = 1 | x) = logistic(-k(x-\theta),
+```text
+P(Y = 1 | x) = logistic[-k(x - theta)]
+```
 
 where:
 
@@ -297,6 +299,10 @@ plot_power_parameter_uncertainty()
 A significant likelihood-ratio test indicates that the response probability changes with cue level relative to an intercept-only model. It does not, by itself, guarantee precise recovery of both parameters. For that reason, the power-analysis function also reports uncertainty and empirical recovery error for `theta` and `k`.
 
 When the true curve is very shallow, when sample size is small, or when cue levels do not span the transition region, estimates of `theta` and `k` can be unstable. Pilot data should therefore be used both to test for a cue-dependent response and to plan follow-up sampling designs with adequate power and acceptable parameter uncertainty.
+
+## Acknowledgements
+
+This package and the associated threshold-assay framework benefited from the guidance and statistical expertise of Dr. Douglas C. Montgomery. His contributions helped shape the experimental-design, likelihood-based inference, and simulation components of this work.
 
 ## Reproducibility
 
