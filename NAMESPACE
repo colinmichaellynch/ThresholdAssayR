@@ -1,0 +1,12 @@
+Package: thresholdAssayR
+Title: Design and Analysis Tools for Threshold Assays
+Version: 0.1.0
+Authors@R: person("Colin", "Lynch", email = "your-email@example.com", role = c("aut", "cre"))
+Description: Functions for designing, simulating, fitting, plotting, and powering binary response and satisfaction threshold assays.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.0
+Imports:
+    stats,
+    ggplot2
