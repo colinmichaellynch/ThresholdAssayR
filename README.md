@@ -1,12 +1,12 @@
 # ThresholdAssayR
 
-`ThresholdAssayR` provides R functions for designing, simulating, fitting, plotting, and powering binary response/satisfaction threshold assays.
+`ThresholdAssayR` provides simple R functions for designing, simulating, fitting, plotting, and powering binary response/satisfaction threshold assays.
 
 The core model is
 
-```text
-P(Y = 1 | x) = logistic{-k(x - theta)}
-```
+\[
+P(Y = 1 \mid x) = \operatorname{logistic}\{-k(x-\theta)\},
+\]
 
 where:
 
@@ -19,31 +19,80 @@ The functions are intended for studies where an investigator presents a set of c
 
 ## Files
 
+Save both files in the same directory:
+
 ```text
 threshold_assay_functions.R
 tutorial_threshold_assay.R
 ```
 
-## Installation/use from source
-
-For simple use, clone or download this repository and source the functions:
+Then run the tutorial from that directory:
 
 ```r
-source("R/threshold_assay_functions.R")
+source("tutorial_threshold_assay.R")
 ```
 
-The fitting and simulation functions use base R. Plotting functions use `ggplot2`:
+For your own analysis, load the functions with:
+
+```r
+source("threshold_assay_functions.R")
+```
+
+## Dependencies
+
+The fitting, simulation, and power-analysis functions use base R. Plotting functions use `ggplot2`:
 
 ```r
 install.packages("ggplot2")
 ```
 
-If you convert this repository into a formal R package, you can install it with:
+## Required data structure
+
+Your dataset should have one row per cue presentation or trial. At minimum, it should include these columns:
+
+| column | description |
+|---|---|
+| `presentation` | Trial or presentation order, usually `1, 2, ..., n`. This column is useful for documenting the experiment, although the model-fitting function only uses `cue` and `response`. |
+| `cue` | Numeric cue or task-demand value presented on that trial. |
+| `response` | Binary outcome coded as `0` or `1`. |
+
+Example:
 
 ```r
-install.packages("devtools")
-devtools::install_github("YOUR-USERNAME/thresholdAssayR")
-library(thresholdAssayR)
+pilot_data <- data.frame(
+  presentation = 1:6,
+  cue = c(0, 10, 20, 30, 40, 50),
+  response = c(1, 1, 1, 0, 0, 0)
+)
+```
+
+A CSV file should have the same structure:
+
+```text
+presentation,cue,response
+1,0,1
+2,10,1
+3,20,1
+4,30,0
+5,40,0
+6,50,0
+```
+
+You can load a real dataset with:
+
+```r
+pilot_data <- read.csv("my_real_threshold_assay_data.csv")
+```
+
+Then fit the model with:
+
+```r
+fit <- fit_threshold_model(
+  data = pilot_data,
+  cue_col = "cue",
+  response_col = "response",
+  alpha = 0.05
+)
 ```
 
 ## Main workflow
@@ -58,7 +107,7 @@ Four sampling strategies are implemented:
 - `shifted_chebyshev`
 
 ```r
-source("R/threshold_assay_functions.R")
+source("threshold_assay_functions.R")
 
 sequence <- make_sampling_sequence(
   strategy = "linear",
@@ -73,21 +122,24 @@ sequence
 
 ### 2. Simulate a pilot dataset
 
+The simulated pilot dataset is deliberately structured like a real dataset, with `presentation`, `cue`, and `response` columns.
+
 ```r
-pilot_data <- simulate_threshold_assay(
+pilot_simulation <- simulate_threshold_assay(
   strategy = "linear",
   n = 16,
   theta = 25,
-  k = -0.25,
+  k = 0.075,
   xmin = 0,
   xmax = 50,
   seed = 10
 )
 
+pilot_data <- pilot_simulation[, c("presentation", "cue", "response")]
 head(pilot_data)
 ```
 
-Here, `theta = 25` means the response probability is 0.5 when the cue is 25. The value `k = -0.25` produces an increasing response-threshold curve.
+Here, `theta = 25` means the response probability is 0.5 when the cue is 25. The value `k = 0.075` produces a decreasing satisfaction-threshold curve.
 
 ### 3. Fit the threshold model
 
@@ -115,13 +167,13 @@ This returns estimates, standard errors, and confidence intervals for:
 - `theta`
 - `k`
 
-The estimate of `theta` is obtained from the logistic coefficients using:
+The estimate of `theta` is obtained from the logistic coefficients using
 
 ```r
 theta = -beta0 / beta1
 ```
 
-and:
+and
 
 ```r
 k = -beta1
@@ -153,7 +205,7 @@ power <- estimate_threshold_power(
   strategy = "linear",
   n = 16,
   theta = 25,
-  k = -0.25,
+  k = 0.075,
   nsim = 1000,
   xmin = 0,
   xmax = 50,
@@ -188,25 +240,26 @@ The error bars show empirical intervals from the simulated assays, and the x mar
 A full tutorial is provided in:
 
 ```text
-examples/tutorial_threshold_assay.R
+tutorial_threshold_assay.R
 ```
 
-Run it from the repository root:
+Run it from the directory containing both files:
 
 ```r
-source("examples/tutorial_threshold_assay.R")
+source("tutorial_threshold_assay.R")
 ```
 
 The tutorial:
 
-1. Generates the four sampling sequences.
-2. Simulates a fake pilot study.
-3. Fits the threshold model.
-4. Extracts parameter estimates and the likelihood-ratio test.
-5. Plots the fitted model.
-6. Runs a power analysis for linear spacing.
-7. Plots uncertainty in recovered parameter estimates.
-8. Compares power across a small grid of sample sizes.
+1. Describes the required real-data structure.
+2. Generates the four sampling sequences.
+3. Simulates a fake pilot study with the same columns as a real dataset.
+4. Fits the threshold model.
+5. Extracts parameter estimates and the likelihood-ratio test.
+6. Plots the fitted model.
+7. Runs a power analysis for linear spacing.
+8. Plots uncertainty in recovered parameter estimates.
+9. Compares power across a small grid of sample sizes.
 
 ## Function reference
 
@@ -214,7 +267,6 @@ The tutorial:
 
 ```r
 make_sampling_sequence()
-plot_sampling_sequences()
 ```
 
 ### Simulation functions
