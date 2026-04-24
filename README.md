@@ -4,7 +4,7 @@
 
 The core model is
 
-P(Y = 1 given x) = logistic(-k(x-\theta),
+P(Y = 1 | x) = logistic(-k(x-\theta),
 
 where:
 
