@@ -20,14 +20,8 @@ The functions are intended for studies where an investigator presents a set of c
 ## Files
 
 ```text
-thresholdAssayR/
-├── R/
-│   └── threshold_assay_functions.R
-├── examples/
-│   └── tutorial_threshold_assay.R
-├── DESCRIPTION
-├── NAMESPACE
-└── README.md
+threshold_assay_functions.R
+tutorial_threshold_assay.R
 ```
 
 ## Installation/use from source
