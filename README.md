@@ -4,10 +4,11 @@
 
 The core model is
 
+```text
 \[
 P(Y = 1 \mid x) = \operatorname{logistic}\{-k(x-\theta)\},
 \]
-
+```
 where:
 
 - `theta` is the cue level where the response probability is 0.5.
